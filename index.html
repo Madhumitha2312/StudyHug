@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyHug – Smart Study Assistant</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sidebar (visible after login) -->
+    <aside id="sidebar" class="sidebar hidden">
+      <div class="sidebar-header">
+        <img src="studyhug.png" alt="StudyHug logo" class="logo">
+        <div class="logo-text">
+          <span class="logo-title">StudyHug</span>
+          <span class="logo-subtitle">Smart Study Assistant</span>
+        </div>
+      </div>
+      <nav class="nav-menu">
+        <button class="nav-item active" data-view="dashboard-view">Dashboard</button>
+        <button class="nav-item" data-view="planner-view">Tasks</button>
+        <button class="nav-item" data-view="timetable-view">Timetable</button>
+        <button class="nav-item" data-view="exam-view">Exam Timetable</button>
+        <button class="nav-item" data-view="assignments-view">Assignments</button>
+        <button class="nav-item" data-view="notes-view">Notes</button>
+        <button class="nav-item" data-view="timer-view">Timer</button>
+        <button class="nav-item" data-view="progress-view">Progress</button>
+        <button class="nav-item" data-view="water-view">Water Reminder</button>
+        <button class="nav-item" data-view="ai-view">AI Assistant</button>
+        <button class="nav-item" data-view="profile-view">Profile</button>
+        <button class="nav-item" data-view="settings-view">Settings</button>
+        <button class="nav-item" data-view="subscription-view">Subscription</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logoutBtn" class="btn-outline full-width">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Top bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenuToggle" class="icon-btn hide-desktop" aria-label="Toggle navigation">
+            ☰
+          </button>
+          <span id="topbarTitle" class="topbar-title">StudyHug</span>
+        </div>
+        <div class="topbar-right">
+          <button id="themeToggle" class="icon-btn" aria-label="Toggle dark mode">🌙</button>
+          <div id="topbarUser" class="topbar-user hidden">
+            <span id="topbarUsername"></span>
+          </div>
+        </div>
+      </header>
+
+      <section id="view-container" class="view-container">
+        <!-- Landing View -->
+        <section id="landing-view" class="view active">
+          <div class="landing-screen">
+            <h1 class="app-title">StudyHug</h1>
+            <img src="studyhug.png" alt="StudyHug robot" class="dashboard-image">
+            <p class="landing-subtitle">Your Smart Study Partner</p>
+            <div class="landing-actions">
+              <button id="landingLoginBtn" class="btn-primary">Login</button>
+              <button id="landingSignupBtn" class="btn-outline">Signup</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Auth Views -->
+        <section id="login-view" class="view auth-view hidden">
+          <div class="auth-card card">
+            <h2>Welcome back 👋</h2>
+            <p class="subtitle">Log in to continue your StudyHug session.</p>
+            <form id="loginForm" class="form">
+              <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" required placeholder="you@example.com">
+              </div>
+              <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" required placeholder="••••••••">
+              </div>
+              <p id="loginError" class="form-error hidden"></p>
+              <button type="submit" class="btn-primary full-width">Login</button>
+            </form>
+            <p class="auth-switch">
+              New to StudyHug?
+              <button id="goToSignup" type="button" class="link-btn">Create an account</button>
+            </p>
+          </div>
+        </section>
+
+        <section id="signup-view" class="view auth-view hidden">
+          <div class="auth-card card">
+            <h2>Create your StudyHug account</h2>
+            <p class="subtitle">Stay organized, focused, and hydrated every day.</p>
+            <form id="signupForm" class="form">
+              <div class="form-group">
+                <label for="signupEmail">Email</label>
+                <input type="email" id="signupEmail" required placeholder="you@example.com">
+              </div>
+              <div class="form-group">
+                <label for="signupPassword">Password</label>
+                <input type="password" id="signupPassword" required minlength="6" placeholder="At least 6 characters">
+              </div>
+              <p id="signupError" class="form-error hidden"></p>
+              <button type="submit" class="btn-primary full-width">Sign up</button>
+            </form>
+            <p class="auth-switch">
+              Already have an account?
+              <button id="goToLogin" type="button" class="link-btn">Login</button>
+            </p>
+          </div>
+        </section>
+
+        <section id="username-view" class="view hidden">
+
+          <div class="auth-card card">
+          
+          <h2>What should we call you?</h2>
+          
+          <input type="text" id="usernameInput"
+          placeholder="Enter your name">
+          
+          <button id="saveUsernameBtn"
+          class="btn-primary full-width">
+          
+          Continue
+          
+          </button>
+          
+          </div>
+          
+          </section>
+
+        <!-- Dashboard View -->
+        <section id="dashboard-view" class="view hidden">
+          <div class="card">
+            <div class="dashboard-logo-wrapper">
+              <img src="studyhug.png" alt="StudyHug" class="dashboard-image">
+            </div>
+            <h2 id="dashboardWelcome"></h2>
+            <p id="dashboardStreak" class="streak-line">🔥 Study Streak: <span id="dashboardStreakDays">0</span> days</p>
+            <p id="dashboardQuote" class="quote"></p>
+            <div class="dashboard-stats">
+              <div class="stat-pill">
+                <span>Study Streak</span>
+                <strong id="dashStreakDays">0 days</strong>
+              </div>
+              <div class="stat-pill">
+                <span>Minutes Today</span>
+                <strong id="dashStudyToday">0 min</strong>
+              </div>
+              <div class="stat-pill">
+                <span>Total Sessions</span>
+                <strong id="dashSessions">0</strong>
+              </div>
+              <div class="stat-pill">
+                <span>Water Tracker</span>
+                <strong id="dashWaterCount">0</strong>
+              </div>
+            </div>
+            <div class="dashboard-progress">
+              <h3>Daily Progress</h3>
+              <div class="progress-bar-wrapper small">
+                <div class="progress-bar">
+                  <div id="dashboardProgressFill" class="progress-fill" style="width: 0%;"></div>
+                </div>
+                <span id="dashboardProgressLabel" class="progress-label">0% of today's tasks completed</span>
+              </div>
+              <ul id="dashboardTasks" class="simple-list"></ul>
+            </div>
+            <div class="dashboard-reminders">
+              <div class="reminder-group">
+                <h3>Exam Reminders</h3>
+                <div id="dashboardExamReminders" class="reminder-chips"></div>
+              </div>
+              <div class="reminder-group">
+                <h3>Assignment Reminders</h3>
+                <div id="dashboardAssignmentReminders" class="reminder-chips"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Planner View -->
+        <section id="planner-view" class="view hidden">
+          <div class="card">
+            <div class="card-header">
+              <h2>Tasks</h2>
+              <p class="subtitle">Capture your study tasks and mark them as complete.</p>
+            </div>
+            <form id="taskForm" class="form inline-form">
+              <input type="text" id="taskSubject" placeholder="Subject" required>
+              <input type="text" id="taskTitle" placeholder="Task" required>
+              <input type="date" id="taskDeadline" required>
+              <button type="submit" class="btn-primary">Add</button>
+            </form>
+            <div id="taskList" class="list"></div>
+          </div>
+        </section>
+
+        <!-- Timetable View -->
+        <section id="timetable-view" class="view hidden">
+          <div class="card">
+            <div class="card-header">
+              <h2>Timetable</h2>
+              <p class="subtitle">Plan your weekly subjects with days and times.</p>
+            </div>
+            <form id="timetableForm" class="form inline-form">
+              <input type="text" id="timetableSubject" placeholder="Subject" required>
+              <select id="timetableDay" required>
+                <option value="">Day</option>
+                <option>Monday</option>
+                <option>Tuesday</option>
+                <option>Wednesday</option>
+                <option>Thursday</option>
+                <option>Friday</option>
+                <option>Saturday</option>
+                <option>Sunday</option>
+              </select>
+              <input type="time" id="timetableTime" required>
+              <button type="submit" class="btn-primary">Add</button>
+            </form>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>Day</th>
+                    <th>Time</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="timetableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Exam Timetable View -->
+        <section id="exam-view" class="view hidden">
+          <div class="card">
+            <div class="card-header">
+              <h2>Exam Timetable</h2>
+              <p class="subtitle">Keep track of upcoming exams and days remaining.</p>
+            </div>
+            <form id="examForm" class="form inline-form">
+              <input type="text" id="examSubject" placeholder="Subject" required>
+              <input type="date" id="examDate" required>
+              <button type="submit" class="btn-primary">Add</button>
+            </form>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>Exam Date</th>
+                    <th>Days Remaining</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="examBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Assignments View -->
+        <section id="assignments-view" class="view hidden">
+          <div class="card">
+            <div class="card-header">
+              <h2>Assignments</h2>
+              <p class="subtitle">Track your upcoming submissions.</p>
+            </div>
+            <form id="assignmentForm" class="form inline-form">
+              <input type="text" id="assignmentName" placeholder="Assignment name" required>
+              <input type="text" id="assignmentSubject" placeholder="Subject" required>
+              <input type="date" id="assignmentDate" required>
+              <button type="submit" class="btn-primary">Add</button>
+            </form>
+            <div class="table-wrapper" style="margin-top: 10px;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Assignment</th>
+                    <th>Subject</th>
+                    <th>Due</th>
+                    <th>Days Left</th>
+                  </tr>
+                </thead>
+                <tbody id="assignmentBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Notes View -->
+        <section id="notes-view" class="view hidden">
+          <div class="card">
+            <div class="card-header">
+              <h2>Notes</h2>
+              <p class="subtitle">Quickly capture ideas, formulas, and reminders.</p>
+            </div>
+            <form id="noteForm" class="form">
+              <div class="form-group">
+                <label for="noteTitle">Title</label>
+                <input type="text" id="noteTitle" placeholder="Chapter 3 – Thermodynamics" required>
+              </div>
+              <div class="form-group">
+                <label for="noteContent">Note</label>
+                <textarea id="noteContent" rows="4" placeholder="Key concepts, formulas, and examples..." required></textarea>
+              </div>
+              <button type="submit" class="btn-primary">Save note</button>
+            </form>
+            <div id="notesList" class="notes-grid"></div>
+          </div>
+        </section>
+
+        <!-- Timer View -->
+        <section id="timer-view" class="view hidden">
+          <div class="card timer-card">
+            <h2>Pomodoro Timer</h2>
+            <p class="subtitle" id="timerSubtitle">Custom focus sessions with short breaks.</p>
+            <div class="timer-display">
+              <span id="timerMode">Focus</span>
+              <div id="timerCountdown">25:00</div>
+            </div>
+            <div class="timer-controls">
+              <button id="timerStart" class="btn-primary">Start</button>
+              <button id="timerPause" class="btn-outline">Pause</button>
+              <button id="timerReset" class="btn-ghost">Reset</button>
+            </div>
+            <p id="timerSessions" class="timer-sessions">Study sessions completed: <span>0</span></p>
+          </div>
+        </section>
+
+        <!-- Progress View -->
+        <section id="progress-view" class="view hidden">
+          <div class="card">
+            <h2>Progress Tracker</h2>
+            <div class="progress-metrics">
+              <div class="metric">
+                <span>Tasks completed</span>
+                <strong id="metricTasksDone">0</strong>
+              </div>
+              <div class="metric">
+                <span>Tasks pending</span>
+                <strong id="metricTasksPending">0</strong>
+              </div>
+              <div class="metric">
+                <span>Study sessions</span>
+                <strong id="metricSessions">0</strong>
+              </div>
+            </div>
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
+              </div>
+              <span id="progressLabel" class="progress-label">0% of planned tasks completed</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Water Reminder View -->
+        <section id="water-view" class="view hidden">
+          <div class="card">
+            <h2>Water Reminder 💧</h2>
+            <p class="subtitle">Stay hydrated while you focus on studying.</p>
+            <form id="waterForm" class="form inline-form">
+              <select id="waterInterval">
+                <option value="30">Every 30 minutes</option>
+                <option value="60">Every 1 hour</option>
+                <option value="120">Every 2 hours</option>
+              </select>
+              <label class="switch-label">
+                <span>Enable reminders</span>
+                <label class="switch">
+                  <input type="checkbox" id="waterToggle">
+                  <span class="slider"></span>
+                </label>
+              </label>
+            </form>
+            <p id="waterStatus" class="subtitle">Reminders are currently off.</p>
+          </div>
+        </section>
+
+        <!-- Profile View -->
+        <section id="profile-view" class="view hidden">
+          <div class="card">
+            <h2>Profile</h2>
+            <form id="profileForm" class="form">
+              <div class="form-group">
+                <label for="profileUsername">Username</label>
+                <input type="text" id="profileUsername" required>
+              </div>
+              <div class="form-group">
+                <label for="profileEmail">Email</label>
+                <input type="email" id="profileEmail" required>
+              </div>
+              <div class="form-group">
+                <label for="profileGoal">Study goal hours per day</label>
+                <input type="number" id="profileGoal" min="1" max="24" step="0.5" placeholder="e.g. 4">
+              </div>
+              <button type="submit" class="btn-primary">Save profile</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- Settings View -->
+        <section id="settings-view" class="view hidden">
+          <div class="card">
+            <h2>Settings</h2>
+            <div class="settings-group">
+              <div class="settings-item">
+                <span>Theme</span>
+                <div class="settings-actions">
+                  <button id="lightModeBtn" class="btn-ghost small">Light</button>
+                  <button id="darkModeBtn" class="btn-outline small">Dark</button>
+                </div>
+              </div>
+              <div class="settings-item">
+                <span>Notifications</span>
+                <label class="switch">
+                  <input type="checkbox" id="notificationsToggle">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="settings-item">
+                <span>Change Username</span>
+                <input type="text" id="settingsUsername" placeholder="Your display name">
+              </div>
+              <div class="settings-item">
+                <span>Study Duration</span>
+                <select id="timerDurationSelect">
+                  <option value="25">25 minutes</option>
+                  <option value="45">45 minutes</option>
+                  <option value="60">60 minutes</option>
+                </select>
+              </div>
+              <div class="settings-item">
+                <span>Accent Color</span>
+                <select id="accentColorSelect">
+                  <option value="blue">Blue</option>
+                  <option value="purple">Purple</option>
+                  <option value="green">Green</option>
+                  <option value="pink">Pink</option>
+                </select>
+              </div>
+              <div class="settings-item">
+                <span>Background Color</span>
+                <select id="backgroundColorSelect">
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                  <option value="pink">Pink</option>
+                  <option value="blue">Blue</option>
+                  <option value="purple">Purple</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Assistant View -->
+        <section id="ai-view" class="view hidden">
+          <div class="card ai-card">
+            <div class="card-header">
+              <h2>AI Study Assistant</h2>
+              <p class="subtitle">Chat with StudyHug about exams, time management, and focus.</p>
+            </div>
+            <div class="chat-container">
+              <div id="chatMessages" class="chat-messages"></div>
+            </div>
+            <form id="aiForm" class="chat-input-row">
+              <input type="text" id="aiQuestion" placeholder="Type a message, e.g. &quot;exam tips&quot; or &quot;time management&quot;" required>
+              <button type="submit" class="btn-primary small">Send</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- Subscription View -->
+        <section id="subscription-view" class="view hidden">
+          <div class="card">
+            <h2>Plans</h2>
+            <p class="subtitle">Choose a plan that grows with your ambition. This is a demo – no payment required.</p>
+            <div class="plans-grid">
+              <div class="plan-card">
+                <h3>Free</h3>
+                <p class="plan-price">$0 / month</p>
+                <ul class="plan-features">
+                  <li>Basic planner</li>
+                  <li>Notes</li>
+                  <li>Pomodoro timer</li>
+                  <li>Water reminder</li>
+                </ul>
+                <button class="btn-outline full-width">Current Plan</button>
+              </div>
+              <div class="plan-card highlighted">
+                <h3>Pro</h3>
+                <p class="plan-price">$6 / month</p>
+                <ul class="plan-features">
+                  <li>Advanced analytics</li>
+                  <li>Unlimited notes</li>
+                  <li>Smart reminders</li>
+                  <li>Priority updates</li>
+                </ul>
+                <button class="btn-primary full-width">Upgrade to Pro</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <!-- Generic modal for water reminders -->
+  <div id="waterModal" class="modal hidden">
+    <div class="modal-content card">
+      <h3>Time to drink water 💧</h3>
+      <p>Stay hydrated to keep your brain at peak performance.</p>
+      <button id="waterModalClose" class="btn-primary full-width">Got it</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
